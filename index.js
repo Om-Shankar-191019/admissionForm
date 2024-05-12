@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 dotenv.config();
 import authRoutes from "./routes/auth.routes.js";
+import errorHandler from "./middleware/errorHandler.js";
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -13,7 +14,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
-
+app.use(errorHandler);
 const start = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
