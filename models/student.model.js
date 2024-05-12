@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import monsoose from "mongoose";
 
 const StudentSchema = new mongoose.Schema(
   {
@@ -10,7 +9,6 @@ const StudentSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
     },
     phoneNumber: {
       type: String,

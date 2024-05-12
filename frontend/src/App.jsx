@@ -6,6 +6,7 @@ import Signup from "./pages/Signup";
 import { useAuthContext } from "./context/AuthContext";
 import AdmissionForm from "./pages/AdmissionForm";
 import Students from "./pages/Students";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const { authUser } = useAuthContext();
@@ -14,19 +15,20 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={authUser ? <Home /> : <Navigate to="/login" />}
+          element={authUser?.token ? <Home /> : <Navigate to="/login" />}
         />
         <Route
           path="/login"
-          element={authUser ? <Navigate to="/" /> : <Login />}
+          element={authUser?.token ? <Navigate to="/" /> : <Login />}
         />
         <Route
           path="/signup"
-          element={authUser ? <Navigate to="/" /> : <Signup />}
+          element={authUser?.token ? <Navigate to="/" /> : <Signup />}
         />
         <Route path="/admission" element={<AdmissionForm />} />
         <Route path="/students" element={<Students />} />
       </Routes>
+      <Toaster />
     </>
   );
 };

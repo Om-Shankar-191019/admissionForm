@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { indianStates } from "../constants";
 import { Link } from "react-router-dom";
+import useAddStudent from "../hooks/useAddStudent";
 
 const AdmissionForm = () => {
+  const { loading, addStudent } = useAddStudent();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -20,9 +22,9 @@ const AdmissionForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    await addStudent(formData);
     setFormData({
       fullName: "",
       email: "",

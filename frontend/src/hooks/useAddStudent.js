@@ -1,35 +1,32 @@
-import React, { useState } from "react";
-import { useAuthContext } from "../context/AuthContext";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
-const useLogin = () => {
+const useAddStudent = () => {
   const [loading, setLoading] = useState(false);
-  const { setAuthUser } = useAuthContext();
 
-  const login = async (userInput) => {
+  const addStudent = async (studentData) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/auth/login`, {
+      const res = await fetch(`/api/student/addStudent`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(userInput),
+        body: JSON.stringify(studentData),
       });
 
       const data = await res.json();
       if (data.error) {
         throw new Error(data.error);
       }
-      setAuthUser(data);
     } catch (error) {
-      //   throw new Error(error);
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
-  return { loading, login };
+
+  return { loading, addStudent };
 };
 
-export default useLogin;
+export default useAddStudent;
