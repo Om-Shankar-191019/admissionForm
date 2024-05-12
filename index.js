@@ -17,9 +17,6 @@ app.use(cors());
 
 const __dirname = path.resolve();
 // routes
-app.get("/", (req, res) => {
-  res.json("hello world");
-});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/student", studentRoutes);
