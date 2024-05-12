@@ -19,3 +19,16 @@ export const signup = async (req, res, next) => {
     next(error);
   }
 };
+
+export const login = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (!user) {
+      throw new Error("User does not exist.");
+    }
+    res.status(200).json({ user });
+  } catch (error) {
+    next(error);
+  }
+};
