@@ -40,14 +40,23 @@ export const login = async (req, res, next) => {
     }
 
     const token = generateToken(user._id, res);
-    res
-      .status(200)
-      .json({
-        _id: user._id,
-        fullName: user.fullName,
-        username: user.username,
-        token,
-      });
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      username: user.username,
+      token,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.cookie("jwt", "", {
+      maxAge: 0,
+    });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     next(error);
   }
