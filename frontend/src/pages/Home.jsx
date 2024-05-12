@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { indianStates } from "../constants";
 
 const Home = () => {
   const [formData, setFormData] = useState({
@@ -159,12 +160,11 @@ const Home = () => {
             <option className="px-2 py-1" value="">
               Select a state
             </option>
-
-            <option className="py-1" value="state1">
-              State 1
-            </option>
-            <option value="state2">State 2</option>
-            <option value="state3">State 3</option>
+            {indianStates.map((state, index) => (
+              <option key={`state--${index}`} className="py-1" value={state}>
+                {state}
+              </option>
+            ))}
           </select>
         </div>
         <button
