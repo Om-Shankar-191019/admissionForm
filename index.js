@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 dotenv.config();
 import authRoutes from "./routes/auth.routes.js";
 import studentRoutes from "./routes/student.routes.js";
@@ -13,6 +14,8 @@ const port = process.env.PORT || 8000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+
+const __dirname = path.resolve();
 // routes
 app.get("/", (req, res) => {
   res.json("hello world");
@@ -21,6 +24,13 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/student", studentRoutes);
 app.use(errorHandler);
+
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
+
 const start = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
