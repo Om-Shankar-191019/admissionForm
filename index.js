@@ -5,6 +5,11 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
 
+// routes
+app.get("/", (req, res) => {
+  res.json("hello world");
+});
+
 const start = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
