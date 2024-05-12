@@ -34,7 +34,20 @@ export const login = async (req, res, next) => {
     if (!user) {
       throw new Error("User does not exist.");
     }
-    res.status(200).json({ user });
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      throw new Error("Invalid Credentials.");
+    }
+
+    const token = generateToken(user._id, res);
+    res
+      .status(200)
+      .json({
+        _id: user._id,
+        fullName: user.fullName,
+        username: user.username,
+        token,
+      });
   } catch (error) {
     next(error);
   }
