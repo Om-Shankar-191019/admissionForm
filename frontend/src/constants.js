@@ -29,11 +29,12 @@ export const indianStates = [
   "West Bengal",
   "Andaman and Nicobar Islands",
   "Chandigarh",
-  "Dadra and Nagar Haveli",
-  "Daman and Diu",
-  "Lakshadweep",
+  "Dadra and Nagar Haveli and Daman and Diu",
   "Delhi",
+  "Lakshadweep",
   "Puducherry",
+  "Jammu and Kashmir",
+  "Ladakh",
 ];
 
 export const defaultAvatar =

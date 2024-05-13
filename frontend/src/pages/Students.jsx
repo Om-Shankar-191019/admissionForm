@@ -5,7 +5,7 @@ import { useStudentContext } from "../context/StudentContext";
 const Students = () => {
   const { loading } = useGetAllStudents();
   const { studentData: students } = useStudentContext();
-  console.log(students);
+
   return (
     <div className="max-w-4xl mx-auto mt-10">
       <h2 className="text-2xl font-semibold mb-4">List of Students</h2>
