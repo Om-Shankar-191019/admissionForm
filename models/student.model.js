@@ -30,6 +30,10 @@ const StudentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    studentImage: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

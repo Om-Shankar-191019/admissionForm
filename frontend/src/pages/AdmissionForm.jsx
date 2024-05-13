@@ -1,10 +1,21 @@
 import React, { useState } from "react";
-import { indianStates } from "../constants";
+import { defaultAvatar, indianStates } from "../constants";
 import { Link } from "react-router-dom";
 import useAddStudent from "../hooks/useAddStudent";
+import { MdPhotoCamera } from "react-icons/md";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { app } from "../firebase";
+import toast from "react-hot-toast";
 
 const AdmissionForm = () => {
   const { loading, addStudent } = useAddStudent();
+  const [filePerc, setFilePerc] = useState(null);
+  const [imgUploadLoading, setImgUploadLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -13,6 +24,7 @@ const AdmissionForm = () => {
     dateOfBirth: "",
     address: "",
     state: "",
+    studentImage: "",
   });
 
   const handleChange = (e) => {
@@ -22,6 +34,34 @@ const AdmissionForm = () => {
     });
   };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    setImgUploadLoading(true);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file?.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePerc(Math.round(progress));
+      },
+      (error) => {
+        toast.error(`failed! only upto 4mb image size allowed.`);
+        setImgUploadLoading(false);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData({ ...formData, studentImage: downloadURL });
+          // console.log(formData);
+          setImgUploadLoading(false);
+        });
+      }
+    );
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addStudent(formData);
@@ -40,6 +80,34 @@ const AdmissionForm = () => {
     <>
       <div className="max-w-md mx-auto mt-10 p-6 bg-white border border-gray-300 shadow-md rounded-md">
         <h2 className="text-xl font-semibold mb-4">Student Admission Form</h2>
+
+        {/* image upload ui */}
+        <div className="flex justify-center  ">
+          <div className="relative  ">
+            <img
+              src={
+                formData.studentImage ? formData.studentImage : defaultAvatar
+              }
+              className="h-16 w-16 rounded-full object-cover "
+            />
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2 absolute -bottom-2 right-0 "
+              htmlFor="userPhoto"
+            >
+              <div className="text-gray-300 rounded-full bg-white p-1 border border-gray-300 cursor-pointer">
+                <MdPhotoCamera size={16} />
+              </div>
+              <input
+                type="file"
+                id="userPhoto"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+            </label>
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className="mb-4 ">
             <label
